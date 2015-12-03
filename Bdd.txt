@@ -1,0 +1,145 @@
+==================================================================================================
+******************************************BASE DE DONNEES*****************************************
+==================================================================================================
+
+Bataillons: 
+
+	elfes_archers
+
+	orcs_archers
+
+	orcs_piquiers
+
+	orcs_warg
+
+	uruk_ai_lourds
+
+	uruk_ai_infanterie
+
+	hommes_cavaliers
+
+	hommes_gardes_royaux
+
+	hommes_infanterie
+
+	hommes_piquiers
+
+	hommes_archers
+
+	hommes_rodeurs
+
+	elfes_soldats
+
+	troll_combat
+
+	haradrims_mumakil
+
+	haradrims
+
+	catapultes
+
+	nains_berserks
+
+	nains_infanterie
+
+	nains_archers? 
+
+	gobelins_infanterie
+
+	gobelins_archers
+
+	gobelins_lourds
+=============================================================
+Types de races 
+	
+	orcs
+
+	gobelins
+
+	elfes
+
+	nains
+
+	engin
+
+	troll
+
+	homme
+
+	uruk_ai
+
+	animal
+============================================================
+Types d'environnement
+
+	forêt
+
+	marécage
+
+	plaine
+
+	montagne
+
+	ville
+
+	collines
+
+	goulet
+===========================================================
+Types de lieux
+
+	dense
+
+	dégagé
+
+	hauteur
+
+	froid
+
+	chaud
+
+	venteux
+
+	lumineux
+
+	obscur
+==========================================================
+Types de caractéristiques d'armée
+
+	rapide
+
+	lente
+
+	puissante
+
+	precise
+
+	distance
+
+	rapprochée
+
+	nombreuse (le nombre d'unités dépend de la race du bataillon, ainsi un bataillon elfe aura beaucoup moins d'unités qu'un bataillon orc)
+
+	degats_zone
+
+	mobile
+
+==================================================================================================
+******************************************FONCTIONNEMENT******************************************
+==================================================================================================
+
+
+On attribue 5 bataillons à chaque armée. 
+
+Idéalement, notre moteur doit parcourir les 5 bataillons de chaque armée afin de pondérer les caractéristiques qui en découlent. 
+Avec un exemple simple (2 bataillons): 
+
+	(BF(A1 (elfes_soldats 1)(hommes_cavaliers 1))(A2 (orcs_piquiers 2)))
+
+	a partir de elfes_soldats, on déduit qu'il y a 10 elfes, 10 soldats à pieds. 
+	a partir de hommes_cavaliers, on déduit qu'il y a 6 cavaliers (permet d'avoir une formation en pointe 1 2 3), 6 hommes. 
+
+	
+
+
+	
