@@ -124,27 +124,35 @@ Types de caractéristiques d'armée
 
 	mobile
 
+	polyvalente
+    
 	
 =================================================================================================
     ******************************************LIEUX******************************************
 =================================================================================================
 
         
-	minas tirith
-	
-	isengard
-	
-	dagorlad
-	
-	kazad dum
-	
-	erebor
-	
-	ancienne forêt
-	
-	
-	
-	
+        azanulbizar : montagne foret lac(keled zaram) etroit escarpé
+        
+        for le cor : forteresse, grottes espace,
+        
+        morannon (porte noire): montagne plaine espace forteresse, obscur
+        
+        kazad dum : souterrain etroit passages secrets forteresse
+        
+        isengard : forteresse espace lumiere
+        
+        fangorn : foret sombre etendu
+        
+        emyn muil : espace visible collines
+        
+        erebor : espace caverne, forteresse, montagne, souterrain
+        
+        lacville : lac etroit lumière
+        
+        dol guldur forteresse etroit sombre foret.
+        
+        
 ==================================================================================================
 ******************************************FONCTIONNEMENT******************************************
 ==================================================================================================
