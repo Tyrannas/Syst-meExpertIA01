@@ -4,7 +4,7 @@
 
 Bataillons: 
 
-	elfes_archers
+	elfes_archers 
 
 	orcs_archers
 
@@ -150,7 +150,7 @@ Types de caractéristiques d'armée
         
         lacville : lac etroit lumière
         
-        dol guldur forteresse etroit sombre foret.
+        dol guldur : forteresse etroit sombre foret.
         
         
 ==================================================================================================
@@ -160,10 +160,17 @@ Types de caractéristiques d'armée
 
 On attribue 5 bataillons à chaque armée. 
 
+
+
 Idéalement, notre moteur doit parcourir les 5 bataillons de chaque armée afin de pondérer les caractéristiques qui en découlent. 
 Avec un exemple simple (2 bataillons): 
 
-	(BF(A1 (elfes_soldats 1)(hommes_cavaliers 1))(A2 (orcs_piquiers 2)))
+
+
+
+
+
+(BF(A1 (elfes_soldats 1)(hommes_cavaliers 1))(A2 (orcs_piquiers 2)))
 
 	a partir de elfes_soldats, on déduit qu'il y a 10 elfes, 10 soldats à pieds. 
 	a partir de hommes_cavaliers, on déduit qu'il y a 6 cavaliers (permet d'avoir une formation en pointe 1 2 3), 6 hommes. 
