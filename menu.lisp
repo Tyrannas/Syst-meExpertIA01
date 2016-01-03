@@ -3,26 +3,27 @@
 (setq path (merge-pathnames "/home/oiseauroch/Syst-meExpertIA01/door.txt"))
 ;;---------------------------------regles----------------------------------------------
 (setq *regles* '(
-;;-------------------------------regles d'analyse d'armée------------------------------
-  (R0((equal armee peunombreuse) (> nombre 3)) (armee nombreuse)) 
-  (R1((> nombre 4)) (distance 2)) 
-  (R2((equal armee  nombreuse)) (truc polyvalente)) 
-  (R3((> distance 23)) (forteresse 5)))
-;;-------------------------------regles de comparaison--------------------------------
+;;-------------------------------regles niveau 0---------------------------------------
+
+;;-------------------------------regles niveau 1---------------------------------------
+
+;;-------------------------------regles niveau 2--------------------------------------
 )
 ;;------------------------------bases de faits----------------------------------------
 (setq *Alliés* '((attaque . 0) (defense . 0)  (vitesse . 0) (siege_attaque . 0) (siege_defense . 0) (nombre . 0) (portee . 0) (espace . 0))
 (setq *Ennemis* '((attaque . 0) (defense . 0) (vitesse . 0) (siege_attaque . 0) (siege_defense . 0) (nombre . 0) (portee . 0) (espace . 0))
-(setq *Comparaison* ())
+
 ;;------------------------------base de données--------------------------------------
 (setq *Lieux* '())
 
 ;;(setq path (merge-pathnames "C:/Users/Felix/Documents/GitHub/Syst-meExpertIA01/door.txt"))
-(defun start(lieu)
+(defun start(lieu armees)
   (let (
     ;;================variables=============
       (regles_appliquees nil)
-    )  
+    )
+  parcours_liste(armees)
+  parcours_liste((list (cdr (assoc lieu *Lieux*))(cdr (assoc lieu *Lieux*))))  
   ;;on applique les règles aux aliés
   ;;===================================================
   (appliqueregle '*Alliés* *regles*)
@@ -38,7 +39,14 @@
   ;;===================================================
   )
 )
-
+(defun parcours_liste (liste)
+  (dolist (x (car liste)
+    (push x *Alliés*)
+  )
+  (dolist (x (cadr liste)
+    (push x *Ennemis*)
+  )
+)
 ;;execute les regles tant que des regles sont déclenchées
 (defun appliqueregle (base regles)
   (setq onBoucle? nil)
