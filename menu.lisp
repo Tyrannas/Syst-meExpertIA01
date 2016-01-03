@@ -8,7 +8,7 @@
     (close in)))
 
 
-(setq *BF* '((armmee peunombreuse) (
+(setq *BF* '((armee . peunombreuse) (nombre . 5) (distance . 12)))
 
 
 (defun parcoursliste (*liste*)
@@ -30,33 +30,24 @@
     )
            
            
-           (setq regle '((((equal armee peunombreuse) (> nombre 3)) (armee nombreuse)) (((> nombre 4)) (distance 2)) (((> distance 1)) (forteresse 5))))
+           (setq regle '((((equal armee peunombreuse) (> nombre 3)) (armee nombreuse)) (((> nombre 4)) (distance 2)) (((equal armee  nombreuse)) (truc polyvalente)) (((> distance 23)) (forteresse 5))))
 
            
            
            
 (defun validationregle (BF regle fait)
-       (print 'regle)
-       (print regle)
-       (print 'fait)
-       (print fait)
-        (print 'car_regle)
-        (print (car regle))
         (if regle
                 (if (assoc (cadr (car regle)) BF)
-                    (if (eval (list (car (car regle)) (list 'quote (cdr 
-    ; quand je met un cdr, les chiffres sont mis en liste, quand je met un cadr, les chaine de caractères sont des symbole et pas des listes
-    (assoc (cadr  (car regle)) BF))) (list 'quote (caddr (car regle)))))
+                    (if (eval (list (car (car regle)) (list 'quote (cdr (assoc (cadr  (car regle)) BF))) (list 'quote (caddr (car regle)))))
                 ; plus retirer les prémisses de la base de fait ?
                         (progn
-                            (print 'progn)
-                            (print fait)
                             (if (assoc (car fait) *BF*)
                                 (if (symbolp (cadr fait))
-                                    (rplacd (assoc (car fait) *BF*) (cdr fait))
-                                    (rplacd (assoc (car fait) *BF*) (+ (cadr (assoc (car fait) *BF*)) (cadr fait)))
+                                    (setf (cdr (assoc (car fait) *BF*)) (cadr fait))
+                                    (setf (cdr (assoc (car fait) *BF*)) (+ (cdr (assoc (car fait) *BF*)) (cadr fait)))
                                 )
-                                (push fait *BF*)
+                                (setq *bf* (acons (car fait) (cadr fait) *BF*)
+                                )
                             )
                         )   
                     )
@@ -65,11 +56,3 @@
 )
 
 
-;; 
-
-(nombre 8)
-
-(((> nombre 5)) (armée nombreuse)
- 
- (if (eval (list (car regle) (cadr (assoc (cadr regle) *BF*)) (caddr regle)))
-     
