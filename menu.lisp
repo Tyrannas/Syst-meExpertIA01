@@ -1,5 +1,6 @@
 ;;=======================DEFINITION DES VARIABLES=====================================
-
+;;-------------------emplacement du fichier texte de la porte, a modifier -------------
+(setq path (merge-pathnames "/home/oiseauroch/Syst-meExpertIA01/door.txt"))
 ;;---------------------------------regles----------------------------------------------
 (setq *regles* '(
 ;;-------------------------------regles d'analyse d'armée------------------------------
@@ -18,8 +19,12 @@
 
 ;;(setq path (merge-pathnames "C:/Users/Felix/Documents/GitHub/Syst-meExpertIA01/door.txt"))
 (defun start()
-
-  ;;on applique les règles aux alliés
+  ;;on affiche le menu
+  (let (
+    ;;================variables=============
+      (regles_appliquees nil)
+    )  
+  ;;on applique les règles aux aliés
   ;;===================================================
   (appliqueregle '*Alliés* *regles*)
   (setq regles_appliquees nil)
