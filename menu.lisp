@@ -1,6 +1,6 @@
 ;;=======================DEFINITION DES VARIABLES=====================================
 ;;-------------------emplacement du fichier texte de la porte, a modifier -------------
-(setq path (merge-pathnames "/home/oiseauroch/Syst-meExpertIA01/door.txt"))
+(setq *armees* '(((hobbit . 25) (rohirrim . 10) (elfe_archer . 10) (nain_erebor . 1) (catapulte . 3)) ((mummakil . 10) (troll . 5) (haradrim . 15) (orc_warg . 3))))
 ;;---------------------------------regles----------------------------------------------
 (setq *regles* '(
   (R0((> elfe_archer 0)) (elfe (15)))
@@ -61,8 +61,8 @@
   (R51((> orc_warg 0)) (attaque (2)))
   (R52((> cavalerie 0)) (attaque (3)))
   (R53((> cavalerie 0)) (defense (1)))
-  (R54((> mummakil 0)) (defense (1)))
-  (R55((> mummakil 0)) (attaque (2)))
+  (R54((> mummakil 0)) (defense (5)))
+  (R55((> mummakil 0)) (attaque (8)))
   (R56((> cavalerie 0)) (portee (1.5)))
   (R57((> cavalerie 0)) (espace (3)))
   (R58((> cavalerie 0)) (vitesse (3)))
@@ -111,7 +111,7 @@
   (R96((equal environnement souterrain)(> gobelin 0)) (defense (2)))
   (R97((equal environnement souterrain)(> gobelin 0)) (attaque (2)))
   (R98((equal terrain forteresse)(> vitesse -800000)) (vitesse (-1)))
-  (R99((equal terrain souterrain)(> nain 0)) (attaque (3)))
+  (R99((equal terrain souterrain)(> nain 0)) (attaque (3))))
 )
 ;;------------------------------bases de faits----------------------------------------
 (setq *Alliés* '((attaque . 0) (defense . 0)  (vitesse . 0) (siege_attaque . 0) (siege_defense . 0) (nombre . 0) (portee . 0) (espace . 0)))
@@ -129,15 +129,15 @@
               (dagorlad (terrain . plaine))
             )
 )
-
+(setq regles_appliquees nil)
 ;;(setq path (merge-pathnames "C:/Users/Felix/Documents/GitHub/Syst-meExpertIA01/door.txt"))
 (defun start(lieu armees)
   (let (
     ;;================variables=============
       (regles_appliquees nil)
     )
-  parcours_liste(armees)
-  parcours_liste((list (cdr (assoc lieu *Lieux*))(cdr (assoc lieu *Lieux*))))  
+  (parcours_liste armees)
+  (parcours_liste (list (cdr (assoc 'lieu *Lieux*))(cdr (assoc 'lieu *Lieux*))))  
   ;;on applique les règles aux aliés
   ;;===================================================
   (appliqueregle '*Alliés* *regles*)
@@ -148,16 +148,16 @@
   (setq regles_appliquees nil)
   ;;on compare les deux armées
   ;;===================================================
-  (compare ())
+  (compare )
   ;;on test le lieu en fonction des stats finales
   ;;===================================================
   )
 )
 (defun parcours_liste (liste)
-  (dolist (x (car liste)
+  (dolist (x (car liste))
     (push x *Alliés*)
   )
-  (dolist (x (cadr liste)
+  (dolist (x (cadr liste))
     (push x *Ennemis*)
   )
 )
@@ -192,41 +192,54 @@
       (nouvelle_valeur (cadr conclusion)) ;;nouvelle valeur
     )
       ;;===========si il reste des premisses à traiter
-    (if (not (equal premisses nil))
+    (print 'premisses)
+    (print premisses)
       ;;===========si la proposition de la premisse est bien dans la base de fait sinon nil
       (if (assoc prop BF)
         ;;===========si les valeurs correspondent aux conditions de la premisse
         (if (eval (list (car premisse) (list 'quote valeur_prop) (list 'quote (car (last premisse)))))
           ;;============puis on ré-applique aux prémisses suivantes
-          (validationregle base (cdr premisses) conclusion)
-          nil
+          (if (cdr premisses)
+            (validationregle base (cdr premisses) conclusion)
+            ;;============si la propriété à modifier existe dans la base
+            (if prop_a_modifier
+                ;;===========si la nouvelle valeur est un symbole
+                (progn 
+                    (print 'prop_a_modifier)
+                (if (symbolp nouvelle_valeur)
+                ;===========on update la valeur dans la base
+                (setf (cdr (assoc (car conclusion) (symbol-value base))) nouvelle_valeur)
+                ;;===========sinon si la valeur est une liste
+                (if (listp nouvelle_valeur)
+                    ;;==============alors c'est qu'on cherche à calculer un nombre d'unités
+                    ;;==============on additionne à la valeur à modifier, la nouvelle valeur * le nombre de bataillons
+                    (setf (cdr (assoc (car conclusion) (symbol-value base))) (+ (cdr prop_a_modifier)(* valeur_prop (car nouvelle_valeur))))
+                    ;;==============sinon on additionne juste à la valeur à modifier la nouvelle valeur
+                    (setf (cdr (assoc (car conclusion) (symbol-value base))) (+ (cdr prop_a_modifier) nouvelle_valeur))
+                )
+                )
+                )
+                ;;===========sinon si la propriété à modifier n'existe pas dans la base
+                ;;===========de meme que plus haut on teste si la valeur est une liste
+                (if (listp nouvelle_valeur)
+                (progn
+                    (print 'nouvelle_valeur)
+                    (print nouvelle_valeur)
+                    (print valeur_prop)
+                    (print conclusion)
+                            
+                ;;================on ajoute les valeur calculées le cas échéant
+                (set base (acons (car conclusion) (* valeur_prop (car nouvelle_valeur)) BF ))
+                    (print 'nouvelle_valeur_validée)
+                )
+                ;;================sinon on ajoute simplement la valeur
+                (set base (acons (car conclusion) nouvelle_valeur BF))
+                )
+            ) 
+          )
+        nil
         )
         nil
-      )
-      ;;============si la propriété à modifier existe dans la base
-      (if prop_a_modifier
-        ;;===========si la nouvelle valeur est un symbole
-        (if (symbolp nouvelle_valeur)
-          ;===========on update la valeur dans la base
-          (setf (cdr (assoc (car conclusion) (symbol-value base))) nouvelle_valeur)
-          ;;===========sinon si la valeur est une liste
-          (if (listp nouvelle_valeur)
-            ;;==============alors c'est qu'on cherche à calculer un nombre d'unités
-            ;;==============on additionne à la valeur à modifier, la nouvelle valeur * le nombre de bataillons
-            (setf (cdr (assoc (car conclusion) (symbol-value base))) (+ (cdr prop_a_modifier)(* valeur_prop (car nouvelle_valeur))))
-            ;;==============sinon on additionne juste à la valeur à modifier la nouvelle valeur
-            (setf (cdr (assoc (car conclusion) (symbol-value base))) (+ (cdr prop_a_modifier) nouvelle_valeur))
-          )
-        )
-        ;;===========sinon si la propriété à modifier n'existe pas dans la base
-        ;;===========de meme que plus haut on teste si la valeur est une liste
-        (if (listp nouvelle_valeur)
-          ;;================on ajoute les valeur calculées le cas échéant
-          (set base (acons (car conclusion) (* valeur_prop (car nouvelle_valeur))))
-          ;;================sinon on ajoute simplement la valeur
-          (set base (acons (car conclusion) nouvelle_valeur BF))
-        )
-      ) 
     )         
   )
 )
@@ -261,26 +274,26 @@
     (setq espace (- (cdr(assoc 'espace *Alliés*) )(cdr(assoc 'espace *Ennemis*))))
 
     (setq coeff (+ attaque defense vitesse nombre portee espace))
-    
+    (print coeff)
     (cond
       ( (< coeff -5)
         (print "Ici la météo de la Terre du Milieu: une pluie d'agonies lentes et douloureuses en approche.")
       )
-      ( (AND (>= coeff -5) (< coeff -1)
+      ( (AND (>= coeff -5) (< coeff -1))
         (print "Et tout de suite, l'horoscope: votre journée sera longue pénible et douloureuse, mais ne baissez pas les bras")
       )
-      ( (AND (>= coeff -1) (<= coeff 1)
+      ( (AND (>= coeff -1) (<= coeff 1))
         (print "Un combat féroce, mais équilibré")
       )
-      ( (AND (> coeff 1) (< coeff 5)
+      ( (AND (> coeff 1) (< coeff 5))
         (print "Izy ma gueule")
       )
       ( (> coeff 5)
         (print "Ne sont ils pas mignons quand ils se font flecher?")
       )
     )
+  )
 )
-
 
 
 
