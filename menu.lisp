@@ -41,7 +41,7 @@
   )
 )
 
-; format des regles : ((liste prémisse) (fait nouveau))
+;;execute les regles tant que des regles sont déclenchées
 (defun appliqueregle (base regles)
   (setq onBoucle? nil)
   (dolist (x regles)
@@ -58,41 +58,61 @@
     (appliqueregle base regles)
   )
 )
-           
+
+;;execute la regle si elle est valide, renvoie nil sinon
 (defun validationregle (base premisses conclusion)
   (let* 
     (
-      (BF (symbol-value base))
-      (prop (get_prop premisses)) 
-      (valeur_prop (get_valeur BF prop))
-      (premisse (car premisses))
-      (valeur_a_modifier (assoc (car conclusion) BF))
-      (nouvelle_valeur (cadr conclusion))
+      ;;==========déclaration des variables
+      (BF (symbol-value base)) ;;ensemble des valeurs de la base traitée
+      (prop (get_prop premisses))  ;;propriété en cours
+      (valeur_prop (get_valeur BF prop)) ;;valeur associée
+      (premisse (car premisses)) ;;premisse en cours
+      (prop_a_modifier (assoc (car conclusion) BF)) ;;valeur à modifier dans la base
+      (nouvelle_valeur (cadr conclusion)) ;;nouvelle valeur
     )
-
+      ;;===========si il reste des premisses à traiter
     (if (not (equal premisses nil))
+      ;;===========si la proposition de la premisse est bien dans la base de fait sinon nil
       (if (assoc prop BF)
+        ;;===========si les valeurs correspondent aux conditions de la premisse
         (if (eval (list (car premisse) (list 'quote valeur_prop) (list 'quote (car (last premisse)))))
+          ;;============puis on ré-applique aux prémisses suivantes
           (validationregle base (cdr premisses) conclusion)
           nil
         )
         nil
-      )  
-      (if valeur_a_modifier
+      )
+      ;;============si la propriété à modifier existe dans la base
+      (if prop_a_modifier
+        ;;===========si la nouvelle valeur est un symbole
         (if (symbolp nouvelle_valeur)
+          ;===========on update la valeur dans la base
           (setf (cdr (assoc (car conclusion) (symbol-value base))) nouvelle_valeur)
+          ;;===========sinon si la valeur est une liste
           (if (listp nouvelle_valeur)
-            (setf (cdr (assoc (car conclusion) (symbol-value base))) (* (cdr valeur_a_modifier) (car nouvelle_valeur))
-            (setf (cdr (assoc (car conclusion) (symbol-value base))) (+ (cdr valeur_a_modifier) nouvelle_valeur))
+            ;;==============alors c'est qu'on cherche à calculer un nombre d'unités
+            ;;==============on additionne à la valeur à modifier, la nouvelle valeur * le nombre de bataillons
+            (setf (cdr (assoc (car conclusion) (symbol-value base))) (+ (* valeur_prop (car nouvelle_valeur))))
+            ;;==============sinon on additionne juste à la valeur à modifier la nouvelle valeur
+            (setf (cdr (assoc (car conclusion) (symbol-value base))) (+ (cdr prop_a_modifier) nouvelle_valeur))
+          )
         )
-        (set base (acons (car conclusion) nouvelle_valeur BF))
+        ;;===========sinon si la propriété à modifier n'existe pas dans la base
+        ;;===========de meme que plus haut on teste si la valeur est une liste
+        (if (listp nouvelle_valeur)
+          ;;================on ajoute les valeur calculées le cas échéant
+          (set base (acons (car conclusion) (* valeur_prop (car nouvelle_valeur))))
+          ;;================sinon on ajoute simplement la valeur
+          (set base (acons (car conclusion) nouvelle_valeur BF))
+        )
       ) 
     )         
   )
 )
 
 
-;;une premisse est constituée d'un test, d'une propriété et d'une valeur
+;;=========================fonctions de service=================
 (defun get_prop (premisses)
   (cadr (car premisses))
 )
