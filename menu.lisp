@@ -1,23 +1,24 @@
 (setq path (merge-pathnames "/home/oiseauroch/Syst-meExpertIA01/door.txt"))
 ;; (setq path (merge-pathnames "C:/Users/Felix/Documents/GitHub/Syst-meExpertIA01/door.txt"))
-
-(let ((in (open path :if-does-not-exist nil)))
-  (when in
-    (loop for line = (read-line in nil)
-         while line do (format t "~a~%" line))
-    (close in)))
+(defun lance_jeu()
+  (let ((in (open path :if-does-not-exist nil)))
+    (when in
+      (loop for line = (read-line in nil)
+           while line do (format t "~a~%" line))
+      (close in)))
+)
 
 
 (setq *BF* '((armee . peunombreuse) (nombre . 5) (distance . 12)))
 
 
 (defun parcoursliste (*liste*)
-       (dolist (x (cadr *liste*))
-               (push x *BFallié*)
-        )
-       (dolist (x (last *liste*))
-               (push x *BFennemi*)
-        )
+  (dolist (x (cadr *liste*))
+    (push x *BFallié*)
+  )
+  (dolist (x (last *liste*))
+    (push x *BFennemi*)
+  )
 )
 
 ; format des regles : ((liste prémisse) (fait nouveau))
@@ -25,34 +26,67 @@
        (dolist (x *regles*)
            (print 'boucle1)
            (print x)
-           (validationregle *BFallié* (car x) (cadr x))
+           (validationregle *BFallié* (cadr x) (caddr x))
         )
     )
            
            
-           (setq regle '((((equal armee peunombreuse) (> nombre 3)) (armee nombreuse)) (((> nombre 4)) (distance 2)) (((equal armee  nombreuse)) (truc polyvalente)) (((> distance 23)) (forteresse 5))))
-
-           
-           
-           
-(defun validationregle (BF regle fait)
-        (if regle
-                (if (assoc (cadr (car regle)) BF)
-                    (if (eval (list (car (car regle)) (list 'quote (cdr (assoc (cadr  (car regle)) BF))) (list 'quote (caddr (car regle)))))
-                ; plus retirer les prémisses de la base de fait ?
-                        (progn
-                            (if (assoc (car fait) *BF*)
-                                (if (symbolp (cadr fait))
-                                    (setf (cdr (assoc (car fait) *BF*)) (cadr fait))
-                                    (setf (cdr (assoc (car fait) *BF*)) (+ (cdr (assoc (car fait) *BF*)) (cadr fait)))
-                                )
-                                (setq *bf* (acons (car fait) (cadr fait) *BF*)
-                                )
-                            )
-                        )   
-                    )
-                )
-        )
+(setq *regles* '(
+  (R0((equal armee peunombreuse) (> nombre 3)) (armee nombreuse)) 
+  (R1((> nombre 4)) (distance 2)) 
+  (R2((equal armee  nombreuse)) (truc polyvalente)) 
+  (R3((> distance 23)) (forteresse 5)))
 )
+           
+           
+           
+(defun validationregle (BF premisses conclusion)
+  (let* 
+    (
+      (prop (get_prop premisses)) 
+      (valeur_prop (get_valeur BF prop))
+      (premisse (car premisses))
+      (valeur_a_modifier (assoc (car conclusion) *BF*))
+      (nouvelle_valeur (cadr conclusion))
+    )
+
+    (if (not (equal premisses nil))
+      (if (assoc prop BF)
+        (if (eval (list (car premisse) (list 'quote valeur_prop) (list 'quote (car (last premisse)))))
+          (validationregle BF (cdr premisses) conclusion)
+          nil
+        )
+        nil
+      )  
+      (if valeur_a_modifier
+        (if (symbolp (cadr conclusion))
+          (setf (cdr valeur_a_modifier) (cadr conclusion))
+          (setf (cdr valeur_a_modifier) (+ (cdr valeur_a_modifier) (cadr conclusion)))
+        )
+        (setq *BF* (acons (car conclusion) (cadr conclusion) *BF*))
+      ) 
+    )         
+  )
+)
+
+;;une premisse est constituée d'un test, d'une propriété et d'une valeur
+(defun get_prop (premisses)
+  (cadr (car premisses))
+)
+(defun get_valeur (BF prop)
+  (cdr (assoc prop BF))
+)
+
+
+
+
+Base de lieu + stats
+Base de règles
+Base de règles de comparaison entre armées
+
+
+
+
+
 
 
