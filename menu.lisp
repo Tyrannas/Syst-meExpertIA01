@@ -41,15 +41,6 @@
   )
 )
 
-(defun parcoursliste (*liste*)
-  (dolist (x (cadr *liste*))
-    (push x *BFallié*)
-  )
-  (dolist (x (last *liste*))
-    (push x *BFennemi*)
-  )
-)
-
 ; format des regles : ((liste prémisse) (fait nouveau))
 (defun appliqueregle (base regles)
   (setq onBoucle? nil)
@@ -90,13 +81,16 @@
       (if valeur_a_modifier
         (if (symbolp nouvelle_valeur)
           (setf (cdr (assoc (car conclusion) (symbol-value base))) nouvelle_valeur)
-          (setf (cdr (assoc (car conclusion) (symbol-value base))) (+ (cdr valeur_a_modifier) nouvelle_valeur))
+          (if (listp nouvelle_valeur)
+            (setf (cdr (assoc (car conclusion) (symbol-value base))) (* (cdr valeur_a_modifier) (car nouvelle_valeur))
+            (setf (cdr (assoc (car conclusion) (symbol-value base))) (+ (cdr valeur_a_modifier) nouvelle_valeur))
         )
         (set base (acons (car conclusion) nouvelle_valeur BF))
       ) 
     )         
   )
 )
+
 
 ;;une premisse est constituée d'un test, d'une propriété et d'une valeur
 (defun get_prop (premisses)
@@ -105,13 +99,6 @@
 (defun get_valeur (BF prop)
   (cdr (assoc prop BF))
 )
-
-
-
-
-Base de lieu + stats
-Base de règles
-Base de règles de comparaison entre armées
 
 
 
