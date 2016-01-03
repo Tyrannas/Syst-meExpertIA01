@@ -1,0 +1,133 @@
+
+
+
+
+
+
+
+
+
+
+((R0((> elfe_archer 0)) (elfe (15)))
+(R1((> orc_archer 0)) (orc (20)))
+(R2((> orc_piquier 0)) (orc (10)))
+(R3((> orc_warg 0)) (orc_warg (5)))
+(R4((> ourouk-hai 0)) (ourouk_hai (10)))
+(R5((> rohirrim 0)) (homme (6)))
+(R6((> garde_de_la_tour 0)) (homme (5)))
+(R7((> gondor_infanterie 0)) (homme (15)))
+(R8((> gondor_piquier 0)) (homme (12)))
+(R9((> rodeur 0)) (homme (7)))
+(R10((> gondor_archer 0)) (homme (20))) 
+(R11((> elfe_infanterie 0)) (elfe (10)))
+(R12((> troll 0)) (troll (5)))
+(R13((> haradrim 0)) (homme (10)))
+(R14((> catapulte 0)) (catapulte (2)))
+(R15((> nain_erebor 0)) (nain (12)))
+(R16((> nain_infanterie 0)) (nain (15)))
+(R17((> nain_archer 0)) (nain (15)))
+(R18((> gobelin_infanterie 0)) (gobelin (30)))
+(R19((> gobelin_archer 0)) (gobelin (20)))
+(R20((> hobbit 0)) (hobbit (8)))
+ 
+(R21((> 0 elfe_archer)) (archer (15)))
+(R22((> orc_archer 0)) (archer (20)))
+(R23((> rodeur 0)) (archer (7)))
+(R24((> mummakil 0)) (archer (15)))
+(R25((> gondor_archer 0)) (archer (20)))
+(R26((> nain_archer 0)) (archer (20)))
+(R27((> gobelin_archer 0)) (archer (20)))
+ 
+(R28((> orc_piquier 0)) (piquier (10)))
+(R29((> garde_de_la_tour 0)) (piquier (5)))
+(R30((> orc_warg 0)) (cavalerie (5)))
+(R31((> rohirrim 0)) (cavalerie (6)))
+(R32((> ourouk-hai 0)) (infanterie (10)))
+(R33((> gondor_infanterie 0)) (infanterie (15)))
+(R34((> elfe_infanterie 0)) (infanterie (10)))
+(R35((> haradrim 0)) (infanterie (10)))
+(R36((> nain_infanterie 0)) (infanterie (15)))
+(R37((> gobelin_infanterie)) (infanterie (20)))
+(R38((> hobbit 0)) (infanterie (8)))
+ 
+(R39((> troll 0)) (siege (5)))
+(R40((> mummakil 0)) (siege (5)))
+(R41((> catapulte 0)) (siege (5)))
+ 
+(R42((> siege 5)(> cavalerie 5)(> piquier 5)(> infanterie 5)(> archer 5)) ((armee polyvalente)))
+(R43((> siege 0)) (vitesse (-2)))
+(R44((> elfe 0)) (precision (1)))
+(R45((> nain 0)) (defense (2)))
+(R46((> nain 0)) (vitesse (-0.3)))
+(R47((> piquier 0)) (attaque (1)))
+(R48((> piquier 0)) (defense (3)))
+(R49((> ourouk'hai 0)) (defense (1)))
+(R50((> ourouk-hai 0)) (attaque (3)))
+(R51((> orc_warg 0)) (attaque (2)))
+(R52((> cavalerie 0)) (attaque (3)))
+(R53((> cavalerie 0)) (defense (1)))
+(R54((> mummakil 0)) (defense (1)))
+(R55((> mummakil 0)) (attaque (2)))
+(R56((> cavalerie 0)) (portee (1.5)))
+(R57((> cavalerie 0)) (espace (3)))
+(R58((> cavalerie 0)) (vitesse (3)))
+ 
+(R59((> archer 0)) (attaque (2)))
+(R60((> archer 0)) (defense (1)))
+(R61((> rodeur 0)) (defense (1)))
+(R62((> rodeur 0)) (attaque (3)))
+(R63((> archer 0)) (portee (4)))
+(R64((> archer 0)) (vitesse (0.3)))
+(R65((> infanterie 0)) (attaque (2)))
+(R66((> infanterie 0)) (defense (2)))
+(R67((> troll 0)) (defense (2)))
+(R68((> troll 0)) (attaque (2)))
+(R69((> garde_de_la_tour 0)) (attaque (2)))
+(R70((> garde_de_la_tour 0)) (defense (3)))
+(R71((> siege 0)) (portee (4)))
+(R72((> siege 0)) (espace (4)))
+ 
+(R73((> elfe 0)) (attaque (2)))
+(R74((> elfe 0)) (vitesse (2)))
+(R75((> nain 0)) ( attaque (1)))
+(R76((> mummakil 0)) ( vitesse (2)))
+(R77((> troll 0)) ( vitesse (2)))
+ 
+(R78((equal terrain forteresse) (> siege 0)) (attaque (3)))
+(R79((equal terrain forteresse) (> siege 0)) (defense (4)))
+(R80((> homme 0)) (nombre (1)))
+(R81((> warg 0)) (nombre (1)))
+(R82((> elfe 0)) (nombre (1)))
+(R83((> nain 0)) (nombre (1)))
+(R84((> orc 0)) (nombre (1)))
+(R85((> catapulte 0)) (nombre (1)))
+(R86((> gobelin 0)) (nombre (1)))
+(R87((> hobbit 0)) (nombre (1)))
+(R88((> mummakil 0)) (nombre (15)))
+(R89((> troll 0)) (nombre (1)))
+ 
+(R90((equal terrain plaine)(> nombre 0)) (espace (2)))
+ 
+(R91((equal terrain forteresse)(> archer 0)) (defense (3)))
+(R92((equal terrain forteresse)(> archer 0)) (portée (2)))
+(R93((equal environnement foret)(> elfe 0)) (attaque (2)))
+(R94((equal environnement foret)(> elfe 0)) (defense (2)))
+(R95((equal environnement souterrain)(> nain 0)) (defense (3)))
+(R96((equal environnement souterrain)(> gobelin 0)) (defense (2)))
+(R97((equal environnement souterrain)(> gobelin 0)) (attaque (2)))
+(R98((equal terrain forteresse)(> vitesse -800000)) (vitesse (-1)))
+ (R99((equal terrain souterrain)(> nain 0)) (attaque (3)))
+ ;suite a completer 
+ numregle=
+100
+
+
+((for le cor (terrain . forteresse))
+            (morannon (terrain . forteresse))
+            (kazad dum (terrain . forteresse) (environnement . souterrain))
+            (isengard (terrain . forteresse))
+            (fangorn (environnement . foret))
+            (erebor (terrain . forteresse) (environnement . souterrain))
+            (dol guldur (terrain . forteresse) (environnement . foret))
+            (dagorlad (terrain . plaine)))
+
