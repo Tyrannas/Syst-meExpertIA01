@@ -161,9 +161,10 @@
 )
 (setq regles_appliquees nil)
 ;;(setq path (merge-pathnames "C:/Users/Felix/Documents/GitHub/Syst-meExpertIA01/door.txt"))
+
+
 (defun start(lieu armees)
-  (setq *Alliés* '((attaque . 0) (defense . 0)  (vitesse . 0) (nombre . 0) (portee . 0) (espace . 0)))
-(setq *Ennemis* '((attaque . 0) (defense . 0) (vitesse . 0) (nombre . 0) (portee . 0) (espace . 0)))
+
   (print *Alliés*)
   (print *Ennemis*)
   ;(let (
@@ -187,6 +188,8 @@
   ;;on test le lieu en fonction des stats finales
   ;;===================================================
   ;)
+  (setq *Alliés* '((attaque . 0) (defense . 0)  (vitesse . 0) (nombre . 0) (portee . 0) (espace . 0)))
+  (setq *Ennemis* '((attaque . 0) (defense . 0) (vitesse . 0) (nombre . 0) (portee . 0) (espace . 0)))
 )
 (defun parcours_liste (liste)
   (dolist (x (car liste))
@@ -321,7 +324,8 @@
 
     (setq coeff (+ attaque defense vitesse nombre portee espace))
     (setq coeff (/ coeff (+  (cdr(assoc 'nombre *Alliés*) )(cdr(assoc 'nombre *Ennemis*)))))
-    (print coeff)
+    (print "probabilité de victoire")
+    (print (* (+ 6 ( * 3 coeff)) 7 ))
     (cond
       ( (< coeff -2)
         (print "Ici la météo de la Terre du Milieu: une pluie d'agonies lentes et douloureuses en approche.")
@@ -333,10 +337,10 @@
         (print "Un combat féroce, mais équilibré")
       )
       ( (AND (> coeff 0.7) (< coeff 2))
-        (print "Izy ma gueule")
+        (print "Ne sont ils pas mignons quand ils se font flecher?")
       )
       ( (> coeff 2)
-        (print "Ne sont ils pas mignons quand ils se font flecher?")
+        (print "Vous lisez tranquilement le journal tout en découpant d'une main distraite vos ennemis.")
       )
     )
   )
